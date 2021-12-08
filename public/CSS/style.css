@@ -1,0 +1,197 @@
+html,body{
+    margin:0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: sans-serif;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    width: 100%;
+    height: 100%;
+}
+
+.all{
+    width: 90%;
+    height: 90%;
+    margin: auto;
+
+}
+
+.title{
+    margin: 1rem auto;
+    width: fit-content;
+    font-size: 3rem;
+    color: #eee;
+    text-align: center;
+    padding: 1rem;
+    background-color: rgba(120, 40, 40, 0.75);
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all .5s;
+
+}
+.title:hover{
+    transform: scale(1.1);
+    transform: rotate3d(0, 1, 0, 360deg);
+}
+
+.group{
+    padding: 1rem;
+    background-color: rgba(120, 40, 40, 0.75);
+    border-radius: 8px;
+    transition: all 1s;
+    height: 30px;
+    overflow-y: hidden;
+    margin-bottom: 1rem;
+}
+
+.group:hover{
+    transform: scale(1.02);
+}
+
+.big{
+    height:50px;
+}
+
+.center{
+    justify-content: center;
+    align-items: center;
+}
+
+.flexcol{
+    display:flex;
+    flex-direction:column;
+}
+
+.flexrow{
+    display:flex;
+    flex-direction: row;
+}
+
+.slideshow{
+    overflow-x: hidden;
+    width: 100%;
+    transition: all 1s;
+}
+
+.slideshow[slide="on"]{
+    width: 0px;
+
+}
+
+.slideshow > *{
+    width: 100%;
+    display: flex;
+}
+
+.slideshow[slide="on"] > *{
+    display: "none";
+}
+
+.slidebtn{
+    transition: width 1s;
+    width: 100%;
+}
+
+.slidebtn[slide="off"]{
+    width: 20%;
+}
+
+#chatroom{
+    display: none;
+    transition: all 5s;
+    padding: 1rem;
+    height: 90%;
+    color:white;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+}
+
+#chatroomsdiv{
+    height: 200px;
+    overflow-y: auto;
+}
+
+#bgcanvas{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: red;
+    z-index: -1;
+    filter: blur(10px) contrast(100) brightness(75%) saturate(50%);
+    outline: 1rem solid red;
+}
+
+input{
+    background-color: rgba(220, 220, 220, 0.75);
+    border:none;
+    outline: none;
+    cursor: pointer;
+}
+
+input:active,input:focus-visible,input:focus,input:hover{
+    background-color: rgba(179, 179, 179, 0.75);
+}
+
+input[type="text"],input[type="password"]{
+    cursor: text;
+}
+
+.roomdisdiv{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+    margin-bottom: .5rem;
+    gap: 0.5rem;
+}
+.roomdisdiv > *{
+    width: 50%;
+}
+
+.roomdisdiv > *:disabled{
+    cursor: default;
+}
+
+#chat{
+height: 300px;
+width: 100%;
+margin: .5rem;
+overflow-y: auto;
+}
+
+#chat > a{
+    background-color: rgba(220, 220, 220, 0.75);
+    border:none;
+    outline: none;
+    cursor: pointer;
+    
+}
+
+#chat_roomname{
+    height: min-content;
+    font-size: 2rem;
+
+}
+
+#memberlist{
+    height: 300px;
+width: 100%;
+margin: .5rem;
+
+}
+
+#memberlist > *{
+    cursor: default;
+}
+
+#nickchange,#msgsend{
+    height: 200px;
+    overflow: visible;
+    padding: 1rem;
+}
+
+#msgsend>*,#nickchange > *{
+width: 100%;
+height: min-content;
+}

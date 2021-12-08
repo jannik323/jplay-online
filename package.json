@@ -1,0 +1,11 @@
+{
+  "name": "jplay-online",
+  "version": "1.0.0",
+  "description": "play games online with your friends , in jgames-online",
+  "main": "index.js",
+  "scripts": {
+    "test": "start node index.js"
+  },
+  "author": "jannik323",
+  "license": "ISC"
+}

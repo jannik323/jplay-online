@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>J-Chat</title>
+    <script defer src="/socket.io/socket.io.js"></script>
+    <script defer src="JS/script.js"></script>
+    <link rel="stylesheet" href="CSS/style.css">
+
+</head>
+<body>
+
+    <canvas id="bgcanvas"></canvas>
+
+
+    <div class="all flexcol">
+
+        <p onclick="location.reload(true);" class="title">J-Chat</p>
+    
+    
+        <div class="group flexrow" id="roommakediv">
+            <input class="slidebtn" slide="on" type="button" id="mkroom" value="Make a Room" onclick="slide(this)">
+            <div class="flexrow slideshow" slide="on">
+    
+                    <input type="text" autocomplete="off" id="m_roomname" placeholder="room name">
+                    <input type="password" autocomplete="off" id="m_roompas" placeholder="room password">
+                    <input type="button" autocomplete="off" id="sendroom" value="Send" onclick="makeroom()">
+            </div>
+        </div>
+    
+        <div class="group flexrow" id="roomjoindiv">
+            <input class="slidebtn" slide="on" type="button" id="jnroom" value="Join a Room" onclick="slide(this)">
+            <div class="flexrow slideshow" slide="on">
+    
+                    <input type="text" autocomplete="off"  id="j_roomname" placeholder="room name">
+                    <input type="password" autocomplete="off"  id="j_roompas" placeholder="room password">
+                    <input type="button" autocomplete="off" id="joinroom" value="Send" onclick="joinroom()">
+            </div>
+        </div>
+
+        <div class="group flexcol" id="chatroomsdiv">
+            
+            
+        </div>
+    
+        <div class="flexcol group" id="chatroom">
+
+            <div class="group big center flexrow" id="chat_roomname">
+                <h1 ></h1>
+            </div>
+
+            <div class="flexrow">
+                <div class="group flexcol" id="chat">
+                </div>
+                <div class="flexcol group" id="memberlist">
+
+                </div>
+            </div>
+
+            <div class="group flexrow center" id="msgsend">
+                <input type="text" autocomplete="off"  id="msgtext" placeholder=" Message ">
+                <input type="button"  id="sendmsg" value="Send" onclick="sendmsg()">
+                    
+            </div>
+
+            <div class="group flexrow center" id="nickchange">
+                <input type="text" autocomplete="off"  id="nicktext" placeholder=" Nickname ">
+                <input type="button"  id="sendnick" value="Send" onclick="sendnick()">
+                    
+            </div>
+
+
+        </div>
+
+    </div>
+
+</body>
+</html>
