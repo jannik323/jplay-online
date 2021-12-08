@@ -1,13 +1,3 @@
-//todo 
-// time on msgs ( send on ...)
-
-// who is typing rn
-
-//display msgs different   / newlines for the 
-// content . name and time on the first
-// temp file upload
-
-
 const express = require('express');
 const http = require('http');
 const { stdout } = require('process');
