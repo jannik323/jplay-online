@@ -20,10 +20,6 @@ function makeroom(){
     if(!roomname){return;}
 
     socket.emit("makeroom",{name:roomname,password:roompas});
-
-
-
-
 }
 
 function transitionelement(e,visibility=false) {
@@ -119,6 +115,10 @@ document.getElementById("nicktext").addEventListener("keydown",e=>{
     }
 })
 
+socket.on("gameturn",()=>{
+
+})
+
 socket.on("ratelimit",data=>{
     alert("You got ratelimited. Wait "+ data/1000 + " seconds until you can perform that action again.")
 })
@@ -159,8 +159,11 @@ socket.on("joinedroom",room=>{
     transitionelement("roommakediv");
     transitionelement("roomjoindiv");
     transitionelement("chatroomsdiv");
-    transitionelement("chatroom",true);
+    transitionelement("ingame",true);
     document.getElementById("chat_roomname").innerHTML = "Room: " +room;
+    setTimeout(()=>{
+        startgame();
+    },2000)
 })
 
 socket.on("userlist",data=>{
@@ -192,7 +195,7 @@ socket.on("rooms",rooms=>{
         let count = document.createElement("input");
         count.type = "text";
         count.disabled = true;
-        count.value= "Users: "+e.count;
+        count.value= "Users: "+e.count+"/"+e.countlim;
         room.appendChild(count);
 
         if(e.haspassword){
@@ -219,81 +222,19 @@ socket.on("rooms",rooms=>{
 
 })
 
-//canvas zeug 
-
-let canvas = document.getElementById("bgcanvas");
-canvas.width = canvas.clientWidth;
-canvas.height = canvas.clientHeight;
-let ctx = canvas.getContext("2d");
-thingarr = [];
-mousex = 0;
-mousey = 0;
-
-class things{
-    constructor(x){
-        this.x = x;
-        this.y = (Math.random()*canvas.height);
-        this.reset();
-        thingarr.push(this);
+socket.on("eplacecross",(data)=>{
+    if(cells.length==0){return;}
+    cells[data.x][data.y].active=true;
+    if(socket.id==data.id){
+        cells[data.x][data.y].local = true;
     }
-    update(){
-        this.y+=this.cy+this.ya;
-        this.x+=this.cx+this.xa;
-        this.xa *=0.95;
-        this.ya *=0.95;
-        if(this.y>canvas.height+this.size){
-            this.reset();
-            this.y = 0-this.size;
-        }
-        if(this.x>canvas.width+this.size){
-            this.x = 0-this.size;
-        }
-        if(this.x<0-this.size){
-            this.x = canvas.width+this.size;
-        }
-        if(distance(this.x,mousex,this.y,mousey)<this.size){
-            this.xa=-(this.x-mousex)/2;
-            this.ya=-(this.y-mousey)/2;
-        }
-    }
-    render(){
-        ctx.fillStyle= "black";
-        ctx.beginPath();
-        ctx.arc(this.x,this.y,this.size,0,Math.PI*2);
-        ctx.fill();
-    }
-    reset(){
-        this.cx = randomrange(-1,1);
-        this.cy = randomrange(1,2);
-        this.ya = 0
-        this.xa = 0
-        this.size =randomrange(15,50);
-        
-    }
-}
-
-for (let i = 0; i < 100; i++) {
-    new things(randomrange(0,canvas.width)); 
-}
-
-setInterval(()=>{
-ctx.clearRect(0,0,canvas.width,canvas.height),
-    thingarr.forEach(e => {
-        e.update();
-        e.render();
-    });
-},1000/30)
-
-
-addEventListener("mousemove",(e)=>{
-mousex= e.clientX;
-mousey= e.clientY;
 })
 
-window.addEventListener('resize', function(e) {
-    canvas.width = canvas.clientWidth;
-    canvas.height = canvas.clientHeight;
-});
+socket.on("resetgame",()=>{
+    state=true;
+    cells.forEach(row=>row.forEach(e=>{e.reset()}));
+    setTimeout(()=>{state=false;},1000)
+})
 
 //misc 
 
@@ -303,4 +244,92 @@ function randomrange(min, max) {
 
 function distance(x1,x2,y1,y2){
     return Math.sqrt(((x2-x1)**2)+((y2-y1)**2));
+}
+
+//game section
+
+let canvas;
+let ctx;
+let cells;
+const gridsize = 3;
+let gridscale;
+let fps = 10;
+let state=false;
+
+let lastTime;
+function gameloop() {
+    if(state){return}
+    render();
+}
+
+function render(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    cells.forEach(row=>row.forEach(e=>{e.render()}));
+}
+
+class Cell{
+    constructor(x,y){
+        this.x = x;
+        this.y = y;
+        this.active = false;
+        this.local = false;
+    }
+
+    reset(){
+        this.active = false;
+        this.local = false;
+    }
+
+    render(){
+        
+        ctx.strokeRect(this.x*gridscale, this.y*gridscale, gridscale, gridscale); 
+        if(this.active){
+            if(this.local){
+                ctx.beginPath();
+                ctx.moveTo(this.x*gridscale,this.y*gridscale);
+                ctx.lineTo((this.x*gridscale)+gridscale,(this.y*gridscale)+gridscale);
+                ctx.moveTo(this.x*gridscale,this.y*gridscale+gridscale);
+                ctx.lineTo((this.x*gridscale)+gridscale,(this.y*gridscale));
+                ctx.stroke();
+            }else{
+                ctx.beginPath();
+                ctx.arc((this.x*gridscale)+(gridscale/2),(this.y*gridscale)+(gridscale/2),gridscale/2,0,Math.PI*2,);
+                ctx.stroke();
+            }
+            
+        }
+    }
+}
+
+function startgame(){
+    canvas = document.getElementById("gamecanvas");
+    ctx = canvas.getContext("2d");
+    canvas.width = canvas.height =  canvas.clientWidth;
+    
+    cells = [];
+    gridscale = canvas.width/gridsize;
+
+    for (let x = 0; x < gridsize; x++) {
+        cells[x] = [];
+        for (let y = 0; y < gridsize; y++) {
+            cells[x][y] =new Cell(x,y);
+        }
+    }
+
+    addEventListener("click",mousclick);
+    canvas.addEventListener("resize",()=>{
+        canvas.width = canvas.height = canvas.clientWidth;
+        gridscale = canvas.width/gridsize;
+    })
+    setInterval(()=>{gameloop()},1000/fps)
+
+}
+
+function mousclick(e){
+    let rect = canvas.getBoundingClientRect();
+    if(e.clientX > rect.left && e.clientX < rect.right && e.clientY > rect.top && e.clientY < rect.bottom ){
+        let mposx = (Math.floor((e.clientX- rect.left)/gridscale));
+        let mposy = (Math.floor((e.clientY- rect.top)/gridscale));
+        socket.emit("placecross",{x:mposx,y:mposy});
+    }
 }

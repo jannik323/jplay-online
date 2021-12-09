@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>J-Chat</title>
+    <title>Jgames-online</title>
     <script defer src="/socket.io/socket.io.js"></script>
     <script defer src="JS/script.js"></script>
     <link rel="stylesheet" href="CSS/style.css">
@@ -12,13 +12,9 @@
 </head>
 <body>
 
-    <canvas id="bgcanvas"></canvas>
-
-
     <div class="all flexcol">
 
-        <p onclick="location.reload(true);" class="title">J-Chat</p>
-    
+        
     
         <div class="group flexrow" id="roommakediv">
             <input class="slidebtn" slide="on" type="button" id="mkroom" value="Make a Room" onclick="slide(this)">
@@ -44,32 +40,40 @@
             
             
         </div>
+
+        <div id="ingame" class="flexrow group">
+
+            <div class="group" id="gamediv">
+                <canvas id="gamecanvas"></canvas>
+            </div>
+
+            <div class="flexcol group" id="chatroom">
     
-        <div class="flexcol group" id="chatroom">
-
-            <div class="group big center flexrow" id="chat_roomname">
-                <h1 ></h1>
-            </div>
-
-            <div class="flexrow">
-                <div class="group flexcol" id="chat">
+                <div class="group big center flexrow" id="chat_roomname">
+                    <h1 ></h1>
                 </div>
-                <div class="flexcol group" id="memberlist">
-
+    
+                <div class="flexrow" id="chatcontainer">
+                    <div class="group flexcol" id="chat">
+                    </div>
+                    <div class="flexcol group" id="memberlist">
+    
+                    </div>
                 </div>
-            </div>
-
-            <div class="group flexrow center" id="msgsend">
-                <input type="text" autocomplete="off"  id="msgtext" placeholder=" Message ">
-                <input type="button"  id="sendmsg" value="Send" onclick="sendmsg()">
-                    
-            </div>
-
-            <div class="group flexrow center" id="nickchange">
-                <input type="text" autocomplete="off"  id="nicktext" placeholder=" Nickname ">
-                <input type="button"  id="sendnick" value="Send" onclick="sendnick()">
-                    
-            </div>
+    
+                <div class="group flexrow center" id="msgsend">
+                    <input type="text" autocomplete="off"  id="msgtext" placeholder=" Message ">
+                    <input type="button"  id="sendmsg" value="Send" onclick="sendmsg()">
+                        
+                </div>
+    
+                <div class="group flexrow center" id="nickchange">
+                    <input type="text" autocomplete="off"  id="nicktext" placeholder=" Nickname ">
+                    <input type="button"  id="sendnick" value="Send" onclick="sendnick()">
+                        
+                </div>
+        </div>
+    
 
 
         </div>
