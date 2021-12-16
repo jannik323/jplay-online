@@ -195,6 +195,21 @@ io.on('connection', (socket) => {
             io.in(socket.curroom).emit("sysmsg",win+" has won the duell!")
         }
 
+        let allfilled = true;
+        for (let x = 0; x < rooms[index].gridsize; x++) {
+            for (let y = 0; y < rooms[index].gridsize; y++) {
+                let e = rooms[index].cells[x][y];
+                if(e.placer==null){
+                    allfilled=false;
+                } 
+            }
+        } 
+        if(allfilled){
+            io.in(socket.curroom).emit("resetgame");
+            rooms[index].cells.forEach(row=>row.forEach(e=>{e.reset()}));
+            io.in(socket.curroom).emit("sysmsg","It's a tie! No one has won the duell !")
+        }
+
     })
 
     socket.on("disconnecting",()=>{
